@@ -1,0 +1,199 @@
+GERÇEK HAYAT SENARYOLARI İÇİN 
+
+KARGO / KURYE GÖNDERİ TAKİP SİSTEMİ 
+
+Veritabanı Tasarımı – Normalizasyon – SP & Trigger 
+
+ 
+
+1. ÖDEVİN AMACI 
+
+Bu projenin amacı, gerçek hayatta kullanılan bir kargo gönderi takip sistemini ilişkisel veritabanı mantığıyla modellemek, normalizasyon ilkelerini uygulamak ve SQL dili kullanılarak stored procedure ve trigger yardımıyla iş kurallarını veritabanı seviyesinde gerçekleştirmektir. 
+
+Bu proje kapsamında SQL sadece veri sorgulamak için değil, aynı zamanda iş mantığını uygulamak amacıyla kullanılmıştır. 
+
+ 
+
+2. SENARYO TANIMI 
+
+Kargo / Kurye Gönderi Takip Sistemi 
+
+Bu sistem; müşterilerin kargo göndermesini, kargoların şubeler üzerinden işlenmesini, kuryeler aracılığıyla dağıtıma çıkmasını ve teslimat durumlarının takip edilmesini sağlar. 
+
+ 
+
+3. İŞ ANALİZİ 
+
+3.1 Sistem Ne Yapar? 
+
+Sistem; müşterilerin kargo göndermesini sağlar, gönderilen kargoları ilgili şubeye bağlar, kuryelere atar ve teslimat sürecini takip eder. Kargo ücretleri ağırlığa göre otomatik hesaplanır ve kargo durumları trigger yardımıyla güncellenir. 
+
+ 
+
+3.2 Temel Aktörler 
+
+Müşteri: Kargo gönderir 
+
+Kurye: Kargoyu teslim eder 
+
+Şube: Kargoların çıkış noktasıdır 
+
+Sistem: Ücret ve durum hesaplamalarını yapar 
+
+ 
+
+3.3 Tutulan Temel Bilgiler 
+
+Müşteri bilgileri (ad, soyad, adres, telefon) 
+
+Kargo bilgileri (ağırlık, ücret, durum, tarih) 
+
+Şube bilgileri 
+
+Kurye bilgileri 
+
+Teslimat durumu 
+
+ 
+
+4. ER DİYAGRAMI (SÖZEL AÇIKLAMA) 
+
+Müşteri – Kargo: 1 → N 
+Bir müşteri birden fazla kargo gönderebilir. 
+
+Şube – Kargo: 1 → N 
+Bir şubeden birden fazla kargo çıkabilir. 
+
+Kurye – Teslimat: 1 → N 
+Bir kurye birden fazla teslimat yapabilir. 
+
+Kargo – Teslimat: 1 → 1 
+Her kargonun bir teslimat kaydı vardır. 
+
+ 
+
+5. İLİŞKİSEL ŞEMA 
+
+MUSTERI (musteri_id, ad, soyad, adres, tel) 
+ 
+SUBE (sube_id, sube_adi, il) 
+ 
+KURYE (kurye_id, ad, soyad, tel, sube_id) 
+ 
+KARGO (kargo_id, musteri_id, sube_id, agirlik, ucret, durum, tarih) 
+ 
+TESLIMAT (teslimat_id, kargo_id, kurye_id, teslim_durumu) 
+ 
+
+Not: Birincil ve yabancı anahtarlar mantıksal olarak tasarlanmış olup, SQL tarafında manuel eklenmiştir. 
+
+ 
+
+6. NORMALİZASYON 
+
+ÖRNEK TABLO: KARGO 
+
+1NF 
+
+Tüm alanlar atomiktir. 
+
+Tekrarlayan alan yoktur. 
+
+2NF 
+
+Tablodaki alanlar kargo bilgilerine tam bağımlıdır. 
+
+Müşteri ve şube bilgileri ayrı tablolara ayrılmıştır. 
+
+3NF 
+
+Ücret bilgisi ağırlığa bağlıdır. 
+
+Müşteri adı gibi dolaylı bağımlılıklar tablo dışına çıkarılmıştır. 
+
+ 
+
+ÖRNEK TABLO: MUSTERI 
+
+1NF 
+
+Ad, soyad, adres tekil alanlardır. 
+
+2NF 
+
+Müşteri bilgileri yalnızca müşteri kimliğine bağlıdır. 
+
+3NF 
+
+Adres ve telefon gibi alanlar başka alanlara bağımlı değildir. 
+
+ 
+
+7. ÖRNEK VERİLER 
+
+Her tabloya örnek kayıtlar girilmiştir. 
+(INSERT komutları SQL dosyasında gösterilmiştir.) 
+
+ 
+
+8. STORED PROCEDURE KULLANIMI 
+
+Bu projede aşağıdaki işlemler için 10 adet stored procedure yazılmıştır: 
+
+Müşteri ekleme 
+
+Kargo ekleme 
+
+Müşterinin kargolarını listeleme 
+
+En çok kargo gönderen müşteri 
+
+Toplam gelir hesaplama 
+
+Günlük kargo listesi 
+
+Şubeye göre kargo sayısı 
+
+Kurye teslimatları 
+
+Teslim edilen kargolar 
+
+Detaylı müşteri raporu 
+
+Stored procedure’lar sayesinde tekrar eden işlemler tek merkezden yönetilmiştir. 
+
+ 
+
+9. TRIGGER KULLANIMI 
+
+Projede iş kurallarını otomatikleştirmek için 10 adet trigger kullanılmıştır: 
+
+Kargo eklenince ücret hesaplama 
+
+Kargo eklenince durum atama 
+
+Teslimat girilince kargo durumu güncelleme 
+
+Kargo silmeyi engelleme 
+
+Tarih kontrolü 
+
+Boş durum kontrolü 
+
+Kurye atama kontrolü 
+
+Güncelleme kontrolü 
+
+Trigger’lar sayesinde manuel hata riski azaltılmıştır. 
+
+ 
+
+10. SONUÇ 
+
+Bu projede gerçek hayatta kullanılan bir kargo sistemi SQL kullanılarak modellenmiştir. Normalizasyon kurallarına uygun tablolar tasarlanmış, stored procedure ve trigger kullanılarak iş kuralları veritabanı seviyesinde uygulanmıştır. 
+
+Bu sayede sistem hem düzenli hem de kontrol edilebilir hale getirilmiştir. 
+
+ 
+
+KOD PARÇAÇIĞI LİNKİ : 
