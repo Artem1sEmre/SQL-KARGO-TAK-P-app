@@ -47,11 +47,11 @@ teslim_durumu nchar(20)
 )
 go
 
-insert into musteri values (1,'Emre','Duyar','İstanbul','5551')
+insert into musteri values (1,'Emre','Duyar','Ãstanbul','5551')
 insert into musteri values (2,'Ali','Kaya','Ankara','5552')
 go
 
-insert into sube values (1,'Merkez','İstanbul')
+insert into sube values (1,'Merkez','Ãstanbul')
 insert into sube values (2,'Ankara','Ankara')
 go
 
@@ -87,7 +87,7 @@ insert
 as
 begin
 update kargo
-set durum = 'Hazırlanıyor'
+set durum = 'HazÃ½rlanÃ½yor'
 end
 go
 
@@ -98,7 +98,7 @@ insert
 as
 begin
 update kargo
-set durum = 'Dağıtımda'
+set durum = 'DaÃ°Ã½tÃ½mda'
 end
 go
 
